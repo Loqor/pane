@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Name=Pane
+GenericName=Image Editor
+Comment=Image and photo editor in the style of paint.net
+Exec=pane %F
+Icon=applications-graphics
+Terminal=false
+Categories=Graphics;2DGraphics;RasterGraphics;
+MimeType=image/png;image/jpeg;image/bmp;

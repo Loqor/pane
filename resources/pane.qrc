@@ -1,0 +1,5 @@
+<RCC>
+  <qresource prefix="/fonts">
+    <file alias="SymbolsNerdFont-Regular.ttf">../third_party/fonts/SymbolsNerdFont-Regular.ttf</file>
+  </qresource>
+</RCC>
