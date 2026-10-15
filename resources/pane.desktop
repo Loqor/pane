@@ -2,9 +2,9 @@
 Type=Application
 Name=Pane
 GenericName=Image Editor
-Comment=Image and photo editor in the style of paint.net
+Comment=Image and photo editor in the style of paint.net (written by Claude)
 Exec=pane %F
-Icon=applications-graphics
+Icon=pane
 Terminal=false
 Categories=Graphics;2DGraphics;RasterGraphics;
-MimeType=image/png;image/jpeg;image/bmp;
+MimeType=image/png;image/jpeg;image/bmp;image/gif;image/webp;image/avif;image/heic;image/tiff;image/x-tga;image/x-icon;image/openraster;

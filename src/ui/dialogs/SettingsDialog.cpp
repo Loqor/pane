@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: LGPL-3.0-only
+// Pane — a paint.net-style image editor for Linux. Written by Claude (Anthropic).
+
 #include "ui/dialogs/SettingsDialog.h"
 
 #include "core/Glyphs.h"
@@ -9,9 +12,11 @@
 
 #include <QCheckBox>
 #include <QComboBox>
+#include <QCoreApplication>
 #include <QDesktopServices>
 #include <QDialogButtonBox>
 #include <QFormLayout>
+#include <QGuiApplication>
 #include <QGroupBox>
 #include <QHBoxLayout>
 #include <QHeaderView>
@@ -246,7 +251,13 @@ QWidget *SettingsDialog::keyboardPage()
     v->addWidget(m_keys, 1);
     auto *row = new QHBoxLayout;
     m_keyEdit = new QKeySequenceEdit(this);
+#if QT_VERSION >= QT_VERSION_CHECK(6, 5, 0)
     m_keyEdit->setMaximumSequenceLength(1);
+#else
+    connect(m_keyEdit, &QKeySequenceEdit::keySequenceChanged, this, [this](const QKeySequence &s) {
+        if (s.count() > 1) m_keyEdit->setKeySequence(QKeySequence(s[0]));
+    });
+#endif
     auto *clear = new QPushButton(QStringLiteral("Clear"), this);
     auto *reset = new QPushButton(QStringLiteral("Reset"), this);
     auto *resetAll = new QPushButton(QStringLiteral("Reset All"), this);

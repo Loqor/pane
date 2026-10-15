@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: LGPL-3.0-only
+// Pane — a paint.net-style image editor for Linux. Written by Claude (Anthropic).
+
 // paint.net .pdn reader.
 //
 // Layout: "PDN3" magic, 24-bit little-endian header length, UTF-8 XML header,

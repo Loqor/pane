@@ -40,6 +40,13 @@
         cmakeFlags = [ "-DCMAKE_BUILD_TYPE=Release" ];
         doCheck = true;
         checkPhase = "QT_QPA_PLATFORM=offscreen ctest --output-on-failure";
+        meta = {
+          description = "paint.net-style image editor for Linux, written by Claude (Anthropic)";
+          homepage = "https://github.com/Loqor/pane";
+          license = pkgs.lib.licenses.lgpl3Only;
+          mainProgram = "pane";
+          platforms = pkgs.lib.platforms.linux;
+        };
       };
 
       checks.${system}.default = self.packages.${system}.default;

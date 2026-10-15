@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.28)
+cmake_minimum_required(VERSION 3.25)
 project(Pane VERSION 0.1.0 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 20)
@@ -25,7 +25,7 @@ if(PANE_SANITIZE)
   add_link_options(-fsanitize=address,undefined)
 endif()
 
-find_package(Qt6 6.5 REQUIRED COMPONENTS Core Gui Widgets Concurrent Test PrintSupport)
+find_package(Qt6 6.4 REQUIRED COMPONENTS Core Gui Widgets Concurrent Test PrintSupport)
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(PNG REQUIRED IMPORTED_TARGET libpng)
 pkg_check_modules(JPEG REQUIRED IMPORTED_TARGET libjpeg)
@@ -42,6 +42,12 @@ add_subdirectory(src)
 
 include(CTest)
 if(BUILD_TESTING)
-  find_package(Catch2 3 REQUIRED)
+  find_package(Catch2 3 QUIET)
+  if(NOT Catch2_FOUND)  # e.g. Debian 12 only ships Catch2 v2
+    include(FetchContent)
+    FetchContent_Declare(Catch2 GIT_REPOSITORY https://github.com/catchorg/Catch2.git GIT_TAG v3.7.1 GIT_SHALLOW ON)
+    FetchContent_MakeAvailable(Catch2)
+    list(APPEND CMAKE_MODULE_PATH ${catch2_SOURCE_DIR}/extras)
+  endif()
   add_subdirectory(tests)
 endif()

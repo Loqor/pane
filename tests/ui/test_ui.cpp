@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: LGPL-3.0-only
+// Pane — a paint.net-style image editor for Linux. Written by Claude (Anthropic).
+
 // UI smoke tests (QT_QPA_PLATFORM=offscreen). Set PANE_SCREENSHOT_DIR to save
 // window grabs for each theme.
 #include "core/Commands.h"

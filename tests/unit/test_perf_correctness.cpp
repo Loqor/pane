@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: LGPL-3.0-only
+// Pane — a paint.net-style image editor for Linux. Written by Claude (Anthropic).
+
 // Correctness checks for the performance work: every fast path must produce
 // exactly what the straightforward implementation would.
 #include "core/Commands.h"
@@ -14,6 +17,16 @@
 #include <random>
 
 using namespace pane;
+
+// QImage::flipped() is Qt 6.9+; mirrored() covers the older Qt the build script supports.
+static QImage flipped(const QImage &img, Qt::Orientation o)
+{
+#if QT_VERSION >= QT_VERSION_CHECK(6, 9, 0)
+    return img.flipped(o);
+#else
+    return img.mirrored(o == Qt::Horizontal, o == Qt::Vertical);
+#endif
+}
 
 TEST_CASE("reciprocal division is exact for all blend numerators")
 {
@@ -82,10 +95,10 @@ TEST_CASE("exact flip and rotate match QImage transforms")
         for (int x = 0; x < 301; x += 2) doc->layer(0).surface.setPixel(x, y, rng() | 0xFF000000u);
     QImage orig = doc->flattenToImage();
     commands::flipImage(*doc, Qt::Horizontal);
-    REQUIRE(doc->flattenToImage() == orig.flipped(Qt::Horizontal));
+    REQUIRE(doc->flattenToImage() == flipped(orig, Qt::Horizontal));
     doc->history().undo();
     commands::flipImage(*doc, Qt::Vertical);
-    REQUIRE(doc->flattenToImage() == orig.flipped(Qt::Vertical));
+    REQUIRE(doc->flattenToImage() == flipped(orig, Qt::Vertical));
     doc->history().undo();
     for (int deg : {90, 180, 270}) {
         commands::rotateImage(*doc, deg);

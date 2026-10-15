@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: LGPL-3.0-only
+// Pane — a paint.net-style image editor for Linux. Written by Claude (Anthropic).
+
 // TGA, DDS, GIF (giflib) and ICO file types.
 #include "core/Glyphs.h"
 #include "core/Parallel.h"

@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: LGPL-3.0-only
+// Pane — a paint.net-style image editor for Linux. Written by Claude (Anthropic).
+
 #include "ui/MainWindow.h"
 
 #include "core/Commands.h"
@@ -427,8 +430,13 @@ void MainWindow::createMenus()
     auto *helpMenu = new QMenu(helpBtn);
     helpMenu->addAction(QStringLiteral("About Pane"), this, [this] {
         QMessageBox::about(this, QStringLiteral("About Pane"),
-                           QStringLiteral("<b>Pane</b> 0.1<br>An image editor for Linux in the style of paint.net.<br><br>"
-                                          "Icons: Symbols Nerd Font (Material Design Icons)."));
+                           QStringLiteral("<b>Pane</b> %1<br>An image editor for Linux in the style of paint.net.<br><br>"
+                                          "<b>Written by Claude</b>, Anthropic's AI model, using Claude Code.<br>"
+                                          "Directed and tested by Loqor.<br><br>"
+                                          "Licensed under the GNU LGPL v3.0.<br>"
+                                          "<a href=\"https://github.com/Loqor/pane\">github.com/Loqor/pane</a><br><br>"
+                                          "Icons: Symbols Nerd Font (Material Design Icons).")
+                               .arg(QApplication::applicationVersion()));
     });
     helpBtn->setMenu(helpMenu);
 

@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: LGPL-3.0-only
+// Pane — a paint.net-style image editor for Linux. Written by Claude (Anthropic).
+
 #include "ui/theme/Theme.h"
 
 #include <QApplication>
@@ -11,6 +14,10 @@
 #include <QStyleFactory>
 #include <QStyleHints>
 #include <QWidget>
+
+// pane.qrc lives in the pane_ui static library, whose rcc object the linker drops
+// unless something references it. Q_INIT_RESOURCE must be used at global scope.
+static void initPaneResources() { Q_INIT_RESOURCE(pane); }
 
 namespace pane {
 
@@ -58,6 +65,7 @@ ThemeEngine &ThemeEngine::instance()
 
 ThemeEngine::ThemeEngine()
 {
+    initPaneResources();
     int fontId = QFontDatabase::addApplicationFont(QStringLiteral(":/fonts/SymbolsNerdFont-Regular.ttf"));
     QStringList fams = QFontDatabase::applicationFontFamilies(fontId);
     m_glyphFamily = fams.isEmpty() ? QStringLiteral("Symbols Nerd Font") : fams.first();
@@ -120,8 +128,13 @@ QStringList ThemeEngine::catppuccinAccentNames()
 
 QString ThemeEngine::systemDefaultThemeId() const
 {
-    return QGuiApplication::styleHints()->colorScheme() == Qt::ColorScheme::Dark ? QStringLiteral("dark")
-                                                                                   : QStringLiteral("light");
+#if QT_VERSION >= QT_VERSION_CHECK(6, 5, 0)
+    const bool dark = QGuiApplication::styleHints()->colorScheme() == Qt::ColorScheme::Dark;
+#else
+    const QPalette pal = QGuiApplication::palette();
+    const bool dark = pal.color(QPalette::Window).lightness() < pal.color(QPalette::WindowText).lightness();
+#endif
+    return dark ? QStringLiteral("dark") : QStringLiteral("light");
 }
 
 void ThemeEngine::loadCustomThemes()

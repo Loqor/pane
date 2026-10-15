@@ -1,0 +1,16 @@
+Pane was written by Claude.
+
+Every line of code, every test, the build files and the design documents in
+this repository were written by Claude — Anthropic's AI model (Claude Opus 5.5)
+— working through Claude Code, an agentic coding tool.
+
+  Author:      Claude (Anthropic), https://claude.ai
+  Directed by: Loqor (https://github.com/Loqor) — who chose what to build,
+               made the product decisions and tested the results.
+
+Third-party material:
+  third_party/fonts/SymbolsNerdFont-Regular.ttf — Nerd Fonts (MIT) with icon
+  sets under their own licenses; see third_party/fonts/README.md.
+
+paint.net is a trademark of dotPDN LLC. Pane is an independent project that is
+not affiliated with or endorsed by dotPDN LLC or Rick Brewster.

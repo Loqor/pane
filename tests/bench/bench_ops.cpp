@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: LGPL-3.0-only
+// Pane — a paint.net-style image editor for Linux. Written by Claude (Anthropic).
+
 // End-to-end timings of user-visible operations on a 6000x4000 document.
 #include "core/Commands.h"
 #include "core/Paint.h"

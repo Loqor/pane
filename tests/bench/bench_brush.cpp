@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: LGPL-3.0-only
+// Pane — a paint.net-style image editor for Linux. Written by Claude (Anthropic).
+
 // Brush stroke benchmark: 6000x4000, 5 layers. Reports per-dab time for
 // paint + composite of the dirty region (the work done per input event).
 #include "core/Commands.h"

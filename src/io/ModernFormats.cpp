@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: LGPL-3.0-only
+// Pane — a paint.net-style image editor for Linux. Written by Claude (Anthropic).
+
 // WebP (libwebp), AVIF (libavif), HEIC (libheif) and TIFF (libtiff).
 #include "core/Glyphs.h"
 #include "io/Formats.h"
@@ -8,6 +11,33 @@
 #include <tiffio.h>
 #include <webp/demux.h>
 #include <webp/encode.h>
+
+// libheif 1.20 added size_t-stride accessors and deprecated the int ones; older
+// distros (Ubuntu 24.04, Debian 12) only have the int versions.
+namespace {
+#if LIBHEIF_HAVE_VERSION(1, 20, 0)
+const uint8_t *heifPlaneRO(const heif_image *img, size_t *stride)
+{
+    return heif_image_get_plane_readonly2(img, heif_channel_interleaved, stride);
+}
+uint8_t *heifPlane(heif_image *img, size_t *stride) { return heif_image_get_plane2(img, heif_channel_interleaved, stride); }
+#else
+const uint8_t *heifPlaneRO(const heif_image *img, size_t *stride)
+{
+    int s = 0;
+    const uint8_t *p = heif_image_get_plane_readonly(img, heif_channel_interleaved, &s);
+    *stride = static_cast<size_t>(s);
+    return p;
+}
+uint8_t *heifPlane(heif_image *img, size_t *stride)
+{
+    int s = 0;
+    uint8_t *p = heif_image_get_plane(img, heif_channel_interleaved, &s);
+    *stride = static_cast<size_t>(s);
+    return p;
+}
+#endif
+} // namespace
 
 namespace pane {
 
@@ -155,8 +185,15 @@ public:
         avifEncoder *enc = r == AVIF_RESULT_OK ? avifEncoderCreate() : nullptr;
         avifRWData out = AVIF_DATA_EMPTY;
         if (enc) {
-            enc->quality = std::clamp(o.value("quality", 85).toInt(), 0, 100);
-            enc->qualityAlpha = enc->quality;
+            const int quality = std::clamp(o.value("quality", 85).toInt(), 0, 100);
+#if AVIF_VERSION_MAJOR >= 1
+            enc->quality = quality;
+            enc->qualityAlpha = quality;
+#else  // libavif 0.x (Debian 12): quantizers only, mapped the way libavif 1.x does
+            const int q = ((100 - quality) * 63 + 50) / 100;
+            enc->minQuantizer = enc->maxQuantizer = q;
+            enc->minQuantizerAlpha = enc->maxQuantizerAlpha = q;
+#endif
             enc->speed = std::clamp(o.value("speed", 6).toInt(), 0, 10);
             enc->maxThreads = 8;
             r = avifEncoderWrite(enc, image, &out);
@@ -213,7 +250,7 @@ public:
         }
         int w = heif_image_get_width(img, heif_channel_interleaved), h = heif_image_get_height(img, heif_channel_interleaved);
         size_t stride = 0;
-        const uint8_t *px = heif_image_get_plane_readonly2(img, heif_channel_interleaved, &stride);
+        const uint8_t *px = heifPlaneRO(img, &stride);
         QImage out(w, h, QImage::Format_ARGB32);
         if (!out.isNull())
             for (int y = 0; y < h; ++y) {
@@ -245,7 +282,7 @@ public:
             throw FileError(std::string("HEIC encoding failed: ") + e.message);
         }
         size_t stride = 0;
-        uint8_t *px = heif_image_get_plane2(img, heif_channel_interleaved, &stride);
+        uint8_t *px = heifPlane(img, &stride);
         for (int y = 0; y < flat.height(); ++y) {
             auto *in = reinterpret_cast<const Pixel *>(flat.constScanLine(y));
             uint8_t *o2 = px + size_t(y) * stride;

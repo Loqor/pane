@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Pane app icon: the md-palette glyph (U+F03D8) from the bundled Symbols Nerd Font
+     (Material Design Icons, Apache-2.0), traced as-is onto a Catppuccin Mocha tile. -->
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">
+  <rect x="8" y="8" width="240" height="240" rx="52" fill="#cba6f7"/>
+  <path fill="#1e1e2e" transform="matrix(0.10417 0 0 0.10417 48 21.33)" d="M1236 1024q-52 0 -90 -38t-38 -90t38 -90t92 -38t90 38t36 90t-36 90t-92 38zM980 684q-52 0 -90 -38t-38 -92t38 -90t92 -36t90 36t36 90t-36 92t-92 38zM556 684q-56 0 -92 -38t-36 -92t36 -90t90 -36t92 36t38 90t-38 92t-90 38zM300 1024q-56 0 -92 -38t-36 -90t36 -90t90 -38t92 38t38 90t-38 90t-90 38zM768 256q-208 0 -384 104t-280 280t-104 384t104 384t280 280t384 104q52 0 90 -38t38 -88t-32 -88t-32 -88t36 -88t92 -38h148q116 0 214 -56q97 -55 156 -154q58 -97 58 -214q0 -187 -104 -344q-103 -156 -280 -248q-176 -92 -384 -92z"/>
+</svg>

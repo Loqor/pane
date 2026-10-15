@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: LGPL-3.0-only
+// Pane — a paint.net-style image editor for Linux. Written by Claude (Anthropic).
+
 #include "ui/CanvasView.h"
 
 #include "ui/theme/Theme.h"
@@ -444,7 +447,12 @@ void CanvasView::endInteraction()
 bool CanvasView::event(QEvent *e)
 {
     // Moving to a monitor with a different scale: relayout and keep the same center.
-    if (e->type() == QEvent::DevicePixelRatioChange) {
+#if QT_VERSION >= QT_VERSION_CHECK(6, 6, 0)
+    const bool dprChanged = e->type() == QEvent::DevicePixelRatioChange;
+#else
+    const bool dprChanged = e->type() == QEvent::ScreenChangeInternal;
+#endif
+    if (dprChanged) {
         QPointF c = m_centerImage;
         updateScrollBars();
         if (m_ws) centerOn(c);

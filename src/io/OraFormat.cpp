@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: LGPL-3.0-only
+// Pane — a paint.net-style image editor for Linux. Written by Claude (Anthropic).
+
 // OpenRaster (.ora): a ZIP with stack.xml, one PNG per layer, a merged image and
 // a thumbnail. Keeps layers, names, opacity, visibility and blend modes.
 #include "core/Glyphs.h"
